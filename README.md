@@ -49,3 +49,55 @@ And the following scripts:
 * `yarn-daemons.sh`
 
 Note that these and the rest of Hadoop are located in `/usr/local/hadoop`
+
+## Example
+
+The following instructions are to run a MapReduce job locally.
+
+1. Format the filesystem:
+    ```
+    hdfs namenode -format
+    ```
+
+1. Start NameNode daemon and DataNode daemon:
+    ```
+    start-dfs.sh
+    ```
+
+1. Confirm that the web interface for the NameNode is available:
+
+    [http://127.0.0.1:50070](http://127.0.0.1:50070)
+
+
+1. Make the HDFS directories required to execute MapReduce jobs:
+    ```
+    hdfs dfs -mkdir /user
+    hdfs dfs -mkdir /user/vagrant
+    ```
+
+1. Copy the input files into the distributed filesystem:
+    ```
+    hdfs dfs -put /usr/local/hadoop/etc/hadoop input
+    ```
+
+1. Run the provided examples:
+    ```
+    hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.1.jar grep input output 'dfs[a-z.]+'
+    ```
+
+1. Examine the output files by copying the output files from the distributed filesystem to the local filesystem:
+    ```
+    hdfs dfs -get output local_output
+    cat local_output/*
+    ```
+    Or view the output files on the distributed filesystem:
+    ```
+    hdfs dfs -cat output/*
+    ```
+
+1. When you have finished exploring, stop the NameNode daemon and the DataNode daemon:
+    ```
+    stop-dfs.sh
+    ```
+
+Modified from [Apache Hadoop: Setting up a Single Node Cluster](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/SingleCluster.html).
