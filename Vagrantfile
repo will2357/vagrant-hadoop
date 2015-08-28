@@ -23,7 +23,12 @@ Vagrant.configure(2) do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   config.vm.network :forwarded_port, guest: 80, host: 4567
+  # Hadoop Web Interface Port
   config.vm.network :forwarded_port, guest: 50070, host: 50070
+  # HBase Master Web Interface Port
+  config.vm.network :forwarded_port, guest: 16010, host: 16010
+  # HBase RegionServer Web Interface Port
+  config.vm.network :forwarded_port, guest: 16030, host: 16030
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
