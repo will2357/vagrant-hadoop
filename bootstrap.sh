@@ -29,8 +29,6 @@ if ! [ -L /var/www ]; then
   rm -rf /var/www
   ln -fs /vagrant /var/www
 fi
-mkdir -p /vagrant/html/
-echo HI > /vagrant/html/test.html
 #########################################
 
 
@@ -55,3 +53,16 @@ echo "export HADOOP_HOME=$HADOOP_LOCATION" >> /etc/environment
 echo "export PATH=$PATH:$HADOOP_LOCATION/bin:$HADOOP_LOCATION/sbin" >> /etc/environment
 echo "export HADOOP_PREFIX=$HADOOP_LOCATION" >> /etc/environment
 ##############################
+
+
+##################################
+# Hadoop Pseudo-Distributed Mode #
+##################################
+ssh-keygen -t dsa -P '' -f /home/vagrant/.ssh/id_dsa
+chown vagrant /home/vagrant/.ssh/id_dsa*
+cat /home/vagrant/.ssh/id_dsa.pub >> /home/vagrant/.ssh/authorized_keys
+
+cp /vagrant/hadoop/core-site.xml $HADOOP_LOCATION/etc/hadoop/
+cp /vagrant/hadoop/hdfs-site.xml $HADOOP_LOCATION/etc/hadoop/
+chown -R vagrant $HADOOP_LOCATION
+##################################
