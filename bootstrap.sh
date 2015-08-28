@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 JAVA_HOME_DIR=/usr/lib/jvm/java-7-oracle/
+
 HADOOP_VERSION=hadoop-2.7.1
 HADOOP_FILE="$HADOOP_VERSION".tar.gz
 HADOOP_MIRROR=http://mirrors.gigenet.com/apache/hadoop/common/"$HADOOP_VERSION"/"$HADOOP_FILE"
 HADOOP_LOCATION=/usr/local/hadoop
+
+HBASE_VERSION=hbase-1.0.1.1
+HBASE_FILE="$HBASE_VERSION"-bin.tar.gz
+HBASE_MIRROR=http://mirrors.gigenet.com/apache/hbase/stable/$HBASE_FILE
+HBASE_LOCATION=/usr/local/hbase
 
 
 #################
@@ -44,13 +50,13 @@ then
 elif [ ! -f $HADOOP_FILE ]
 then
   wget $HADOOP_MIRROR
+  cp $HADOOP_FILE /vagrant/
 fi
 tar -xzf $HADOOP_FILE
 mv $HADOOP_VERSION $HADOOP_LOCATION
 chown -R vagrant $HADOOP_LOCATION
 
 echo "export HADOOP_HOME=$HADOOP_LOCATION" >> /etc/environment
-echo "export PATH=$PATH:$HADOOP_LOCATION/bin:$HADOOP_LOCATION/sbin" >> /etc/environment
 echo "export HADOOP_PREFIX=$HADOOP_LOCATION" >> /etc/environment
 ##############################
 
@@ -62,7 +68,33 @@ ssh-keygen -t dsa -P '' -f /home/vagrant/.ssh/id_dsa
 chown vagrant /home/vagrant/.ssh/id_dsa*
 cat /home/vagrant/.ssh/id_dsa.pub >> /home/vagrant/.ssh/authorized_keys
 
-cp /vagrant/hadoop/core-site.xml $HADOOP_LOCATION/etc/hadoop/
-cp /vagrant/hadoop/hdfs-site.xml $HADOOP_LOCATION/etc/hadoop/
+ln -sf /vagrant/hadoop/core-site.xml $HADOOP_LOCATION/etc/hadoop/core-site.xml
+ln -sf /vagrant/hadoop/hdfs-site.xml $HADOOP_LOCATION/etc/hadoop/hdfs-site.xml
+
 chown -R vagrant $HADOOP_LOCATION
 ##################################
+
+
+############################################
+# HBase on HDFS in Psuedo-Distributed Mode #
+############################################
+echo "127.0.0.1 vagrant-ubuntu-trusty-64.ubuntu-domain ubuntu" >> /etc/hosts
+
+if [ -f /vagrant/$HBASE_FILE ] && [ ! -f $HBASE_FILE ]
+then
+  cp /vagrant/$HBASE_FILE .
+elif [ ! -f $HBASE_FILE ]
+then
+  wget $HBASE_MIRROR
+  cp $HBASE_FILE /vagrant/
+fi
+tar -xzf $HBASE_FILE
+mv $HBASE_VERSION $HBASE_LOCATION
+
+echo "export HBASE_HOME=$HBASE_LOCATION" >> /etc/environment
+echo "export PATH=$PATH:$HADOOP_LOCATION/bin:$HADOOP_LOCATION/sbin:$HBASE_LOCATION/bin" >> /etc/environment
+
+ln -sf /vagrant/hbase/hbase-site.xml $HBASE_LOCATION/conf/hbase-site.xml
+
+chown -R vagrant $HBASE_LOCATION
+############################################
