@@ -98,3 +98,29 @@ ln -sf /vagrant/hbase/hbase-site.xml $HBASE_LOCATION/conf/hbase-site.xml
 
 chown -R vagrant $HBASE_LOCATION
 ############################################
+
+
+#########
+# Sqoop #
+#########
+SV=1.4.6
+HV=bin__hadoop-2.0.4-alpha
+SQOOP_VERSION=sqoop-$SV
+SQOOP_HADOOP_VERSION="$SQOOP_VERSION"."$HV"
+SQOOP_FILE="$SQOOP_HADOOP_VERSION".tar.gz
+SQOOP_MIRROR=http://mirrors.gigenet.com/apache/sqoop/"$SV"/$SQOOP_FILE
+SQOOP_LOCATION=/usr/local/sqoop
+
+if [ -f /vagrant/$SQOOP_FILE ] && [ ! -f $SQOOP_FILE ]
+then
+  cp /vagrant/$SQOOP_FILE .
+elif [ ! -f $SQOOP_FILE ]
+then
+  wget $SQOOP_MIRROR
+  cp $SQOOP_FILE /vagrant/
+fi
+tar -xzf $SQOOP_FILE
+mv $SQOOP_HADOOP_VERSION $SQOOP_LOCATION
+
+#TODO: Maybe move all to /usr/lib/ ? Default for Sqoop and doesn't matter for Hadoop and HBase
+
