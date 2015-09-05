@@ -25,14 +25,14 @@ You should now have access to the following commands:
 And the following scripts:
 * `distribute-exclude.sh`, `hadoop-daemon.sh`, `hadoop-daemons.sh`, `hdfs-config.sh`, `httpfs.sh`, `kms.sh`, `mr-jobhistory-daemon.sh`, `refresh-namenodes.sh`, `slaves.sh`, `start-all.sh`, `start-balancer.sh`, `start-dfs.sh`, `start-secure-dns.sh`, `start-yarn.sh`, `stop-all.sh`, `stop-balancer.sh`, `stop-dfs.sh`, `stop-secure-dns.sh`, `stop-yarn.sh`, `yarn-daemon.sh`, and `yarn-daemons.sh`
 
-Note that these and the rest of Hadoop are located in `/usr/local/hadoop`.
+Note that these and the rest of Hadoop are located in `/usr/lib/hadoop`.
 
 ### HBase
 
 You should now have access to the `hbase` command and the following scripts:
 * `draining_servers.rb`, `get-active-master.rb`, `graceful_stop.sh`, `hbase-cleanup.sh`, `hbase-common.sh`, `hbase-config.sh`, `hbase-daemon.sh`, `hbase-daemons.sh`, `hirb.rb`, `local-master-backup.sh`, `local-regionservers.sh`, `master-backup.sh`, `region_mover.rb`, `regionservers.sh`, `region_status.rb`, `rolling-restart.sh`, `shutdown_regionserver.rb`, `start-hbase.sh`, `stop-hbase.sh`, `thread-pool.rb`, and `zookeepers.sh`
 
-Note that these and the rest of HBase are located in `/usr/local/hbase`.
+Note that these and the rest of HBase are located in `/usr/lib/hbase`.
 
 ## HDFS MapReduce Example
 
@@ -61,12 +61,12 @@ The following instructions are to run a MapReduce job locally.
 
 1. Copy the input files from the local file system into the distributed filesystem:
     ```
-    hdfs dfs -put /usr/local/hadoop/etc/hadoop input
+    hdfs dfs -put /usr/lib/hadoop/etc/hadoop input
     ```
 
 1. Run the provided examples:
     ```
-    hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.1.jar grep input output 'dfs[a-z.]+'
+    hadoop jar /usr/lib/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.1.jar grep input output 'dfs[a-z.]+'
     ```
 
 1. Examine the output files by copying the output files from the distributed filesystem to the local filesystem:

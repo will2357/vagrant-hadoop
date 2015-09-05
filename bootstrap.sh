@@ -4,12 +4,12 @@ JAVA_HOME_DIR=/usr/lib/jvm/java-7-oracle/
 HADOOP_VERSION=hadoop-2.7.1
 HADOOP_FILE="$HADOOP_VERSION".tar.gz
 HADOOP_MIRROR=http://mirrors.gigenet.com/apache/hadoop/common/"$HADOOP_VERSION"/"$HADOOP_FILE"
-HADOOP_LOCATION=/usr/local/hadoop
+HADOOP_LOCATION=/usr/lib/hadoop
 
 HBASE_VERSION=hbase-1.0.1.1
 HBASE_FILE="$HBASE_VERSION"-bin.tar.gz
 HBASE_MIRROR=http://mirrors.gigenet.com/apache/hbase/stable/$HBASE_FILE
-HBASE_LOCATION=/usr/local/hbase
+HBASE_LOCATION=/usr/lib/hbase
 
 
 #################
@@ -92,7 +92,6 @@ tar -xzf $HBASE_FILE
 mv $HBASE_VERSION $HBASE_LOCATION
 
 echo "export HBASE_HOME=$HBASE_LOCATION" >> /etc/environment
-echo "export PATH=$PATH:$HADOOP_LOCATION/bin:$HADOOP_LOCATION/sbin:$HBASE_LOCATION/bin" >> /etc/environment
 
 ln -sf /vagrant/hbase/hbase-site.xml $HBASE_LOCATION/conf/hbase-site.xml
 
@@ -109,7 +108,7 @@ SQOOP_VERSION=sqoop-$SV
 SQOOP_HADOOP_VERSION="$SQOOP_VERSION"."$HV"
 SQOOP_FILE="$SQOOP_HADOOP_VERSION".tar.gz
 SQOOP_MIRROR=http://mirrors.gigenet.com/apache/sqoop/"$SV"/$SQOOP_FILE
-SQOOP_LOCATION=/usr/local/sqoop
+SQOOP_LOCATION=/usr/lib/sqoop
 
 if [ -f /vagrant/$SQOOP_FILE ] && [ ! -f $SQOOP_FILE ]
 then
@@ -122,5 +121,13 @@ fi
 tar -xzf $SQOOP_FILE
 mv $SQOOP_HADOOP_VERSION $SQOOP_LOCATION
 
-#TODO: Maybe move all to /usr/lib/ ? Default for Sqoop and doesn't matter for Hadoop and HBase
+echo "export SQOOP_HOME=$SQOOP_LOCATION" >> /etc/environment
 
+chown -R vagrant $SQOOP_LOCATION
+
+
+#######################
+# PATH to executables #
+#######################
+echo "export PATH=$PATH:$HADOOP_LOCATION/bin:$HADOOP_LOCATION/sbin:$HBASE_LOCATION/bin:$SQOOP_LOCATION/bin" >> /etc/environment
+#######################
